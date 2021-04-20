@@ -1,0 +1,20 @@
+schema {
+  query: Query
+}
+
+type Query {
+  getDishes: [Dish]
+}
+
+type Dish {
+  id: ID!
+  name: String!
+  ingridients: [Ingridient!]
+  createdAt: AWSDateTime!
+}
+
+type Ingridient {
+  name: String!
+  quantity: Float!
+  unit: String!
+}

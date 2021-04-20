@@ -1,0 +1,16 @@
+name: serverlessguru-test
+schema: schema.api.graphql
+authenticationType: AWS_IAM
+
+mappingTemplates:
+  - type: Query
+    field: getDishes
+    dataSource: getDishesFunction
+    request: false
+    response: false
+
+dataSources:
+  - type: AWS_LAMBDA
+    name: getDishesFunction
+    config:
+      functionName: getDishes

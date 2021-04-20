@@ -1,0 +1,15 @@
+{
+  "name": "serverlessguru-test",
+  "scripts": {
+    "deploy": "sls deploy --stage dev"
+  },
+  "author": "megapixel23",
+  "license": "MIT",
+  "devDependencies": {
+    "aws-sdk": "^2.889.0",
+    "prettier": "^2.2.1",
+    "serverless": "^2.37.0",
+    "serverless-appsync-plugin": "^1.10.0",
+    "serverless-iam-roles-per-function": "^3.1.0"
+  }
+}

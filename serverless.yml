@@ -1,0 +1,54 @@
+service: serverlessguru-test
+frameworkVersion: '2'
+
+plugins:
+  - serverless-appsync-plugin
+  - serverless-iam-roles-per-function
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: eu-west-1
+  lambdaHashingVersion: 20201221
+  environment:
+    STAGE: ${self:custom.stage}
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1"
+
+package:
+  exclude:
+    - package-lock.json
+    - package.json
+
+custom:
+  region: ${opt:region, self:provider.region}
+  stage: ${opt:stage, self:provider.stage}
+  appSync:
+    - ${file(serverless.appsync-api.yml)}
+
+functions:
+  getDishes:
+    handler: handlers/dishes/index.main
+    environment:
+      DISHES_TABLE: !Ref DishesTable
+    iamRoleStatements:
+      - Effect: Allow
+        Action: dynamodb:Scan
+        Resource: !GetAtt DishesTable.Arn
+
+resources:
+  Resources:
+    DishesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        BillingMode: PAY_PER_REQUEST
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        Tags:
+          - Key: Environment
+            Value: ${self:custom.stage}
+          - Key: Name
+            Value: dishes-table
